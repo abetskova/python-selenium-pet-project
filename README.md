@@ -7,6 +7,7 @@
 Этот проект содержит:
 - **UI тесты** для сайта [SauceDemo](https://www.saucedemo.com/) с использованием Selenium WebDriver
 - **API тесты** для различных REST API с использованием библиотеки requests
+- **Performance тесты** для проверки времени отклика API и загрузки страниц
 - Реализацию паттерна **Page Object Model** для UI тестов
 
 ## 🚀 Структура проекта
@@ -20,6 +21,7 @@ python-selenium-pet-project/
 │   └── products_page.py       # Страница товаров SauceDemo
 ├── test_login.py              # UI тесты для SauceDemo
 ├── test_api_reqres.py         # API тесты (ReqRes + HttpBin)
+├── test_performance.py        # Performance тесты
 ├── requirements.txt           # Зависимости проекта
 ├── pytest.ini               # Конфигурация pytest
 └── README.md                 # Этот файл
@@ -80,6 +82,15 @@ python3 -m pytest test_api_reqres.py::TestHttpBinAPI -v
 python3 -m pytest test_api_reqres.py::TestReqResAPI -v
 ```
 
+### Performance тесты
+```bash
+# Только performance тесты
+python3 -m pytest test_performance.py -v
+
+# Конкретный performance тест
+python3 -m pytest test_performance.py::TestPerformance::test_api_response_time -v
+```
+
 ### HTML отчеты
 ```bash
 # Создать HTML отчет
@@ -111,6 +122,12 @@ python3 -m pytest --html=report.html --self-contained-html -v
 - ✅ Basic Authentication
 - ✅ Custom User-Agent
 
+### Performance тесты
+- ✅ **API Response Time** - проверка времени отклика API (< 1 секунды)
+- ✅ **Multiple API Requests** - производительность при множественных запросах
+- ✅ **Page Load Time** - время загрузки страницы SauceDemo (< 5 секунд)
+- ✅ Headless режим для быстрого выполнения
+
 ## 🏗 Page Object Model
 
 Проект использует паттерн Page Object Model для UI тестов:
@@ -129,6 +146,24 @@ products_page = ProductsPage(driver)
 login_page.open()
 login_page.login("standard_user", "secret_sauce")
 assert products_page.is_on_products_page()
+```
+
+## ⚡ Performance тестирование
+
+### Метрики производительности:
+- **API Response Time** - время отклика REST API
+- **Page Load Time** - время загрузки веб-страниц
+- **Multiple Requests** - производительность при нагрузке
+
+### Пример performance теста:
+```python
+def test_api_response_time(self):
+    start_time = time.time()
+    response = requests.get("https://httpbin.org/get")
+    response_time = time.time() - start_time
+    
+    assert response.status_code == 200
+    assert response_time < 1.0  # Должно быть быстрее 1 секунды
 ```
 
 ## 🐛 Troubleshooting
@@ -151,6 +186,12 @@ Warnings подавляются в `pytest.ini`. Если они все еще �
 python3 -m pytest -v --disable-warnings
 ```
 
+### Performance тесты слишком медленные
+```bash
+# Запуск в headless режиме для ускорения
+python3 -m pytest test_performance.py -v --disable-warnings
+```
+
 ## 📝 Конфигурация
 
 ### pytest.ini
@@ -164,13 +205,17 @@ python3 -m pytest -v --disable-warnings
 
 ## 🚀 Возможные улучшения
 
+- [x] **Добавить performance тесты** ✅
 - [ ] Добавить тесты для корзины и checkout процесса
+- [ ] Реализовать Data-Driven тесты
 - [ ] Реализовать параллельный запуск тестов
 - [ ] Добавить поддержку Chrome WebDriver
 - [ ] Создать CI/CD pipeline
 - [ ] Добавить Allure отчеты
-- [ ] Реализовать Data-Driven тесты
 - [ ] Добавить логирование
+- [ ] Добавить скриншоты при падении тестов
+- [ ] Создать тесты для разных браузеров (Cross-browser testing)
+- [ ] Добавить мониторинг производительности в реальном времени
 
 ## 🤝 Участие в проекте
 
