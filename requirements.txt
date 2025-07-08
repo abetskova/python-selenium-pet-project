@@ -3,3 +3,4 @@ pytest==7.4.3
 pytest-html==4.1.1
 geckodriver-autoinstaller==0.1.0
 urllib3==1.26.18
+requests==2.31.0
